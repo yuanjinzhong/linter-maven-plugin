@@ -14,7 +14,10 @@ public enum StrategyEnum {
   CLASS_HAS_VALIDATED(
       "CLASS_HAS_VALIDATED", MethodHasJsrThenTypeShouldHasValidatedStrategyImpl.class),
   CASCADE_FOR_VALID("CASCADE_FOR_VALID", CascadeForValidLinterStrategyImpl.class),
-  METHOD_HAS_JSR("METHOD_HAS_JSR", FacadeHasValidatedThenMethodShouldHasJsrStrategyImpl.class);
+  METHOD_HAS_JSR("METHOD_HAS_JSR", FacadeHasValidatedThenMethodShouldHasJsrStrategyImpl.class),
+  OVERRIDE_METHOD_NOT_ALTER_CONSTRAINTS(
+      "OVERRIDE_METHOD_NOT_ALTER_CONSTRAINTS",
+      OverrideMethodMustNotAlterParameterConstraintsStrategyImpl.class);
   private String code;
   private Class<Jsr380LinterStrategy> strategyClass;
 

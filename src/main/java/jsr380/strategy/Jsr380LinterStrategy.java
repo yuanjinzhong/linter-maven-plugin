@@ -85,11 +85,7 @@ public abstract class Jsr380LinterStrategy {
     }
   }
 
-  /**
-   * - jsr约束只能在父接口方法上，实现类上不可以有 - 各种注解父类接口上一定要有(@validated,@valid,jsr约束注解),实现类上不做要求 -
-   * 若方法上参数上有加JSR的约束注解的话,就检查当前类和父接口上有没有@validate注解 - 方法参数上有@Valid注解,则对应实体内部必须有JSR约束注解 -
-   * 若方法参数上的约束注解有分组信息,则方法上可能应该有@validate注解(使用分组提供者注解的除外) - 防止滥用: 只在RPC接口层使用(待定)
-   */
+  /** 一些符合项目要求的linter */
   protected abstract void linter() throws MojoFailureException, MojoExecutionException;
 
   private void printLinterResult() throws MojoFailureException {

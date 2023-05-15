@@ -39,6 +39,7 @@ public class FacadeHasValidatedThenMethodShouldHasJsrStrategyImpl extends Jsr380
             for (int i = 0; i < genericParameterTypes.length; i++) {
               for (Annotation annotation : parameterAnnotations[i]) {
                 if (annotation instanceof Valid || isJsr380Annotation(annotation)) {
+                  // 至少一个方法
                   PASS_THE_VERIFICATION = true;
                 }
               }
