@@ -53,13 +53,13 @@
 ## 关于run time
 目前三个linter策略，看注释可知含义
 
-![img.png](img.png)
+![img.png](images/img.png)
 
 各个linter执行策略是fail fast的，一个策略检测到不符合规范，目标项目就会`BUILD FAILURE`，不会继续其他策略
 
 不过每个策略内，会把目标文件都扫描一遍：
 
-![img_1.png](img_1.png)
+![img_1.png](images/img_1.png)
 
 
 ## 使用
@@ -73,12 +73,12 @@
 
 * 应用项目的工程在终端执行`mvndebug linter:check`
 
-![img_2.png](img_2.png)
+![img_2.png](images/img_2.png)
 
 插件项目勾选远程debug启动
 
-![img_3.png](img_3.png)
+![img_3.png](images/img_3.png)
 
-![img_4.png](img_4.png)
+![img_4.png](images/img_4.png)
 
 
