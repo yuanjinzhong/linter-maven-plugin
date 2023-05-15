@@ -6,7 +6,7 @@
 
     <groupId>cn.huolala.legao</groupId>
     <artifactId>linter-maven-plugin</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.2-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <properties>
@@ -39,6 +39,59 @@
             <version>3.4</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-project</artifactId>
+            <version>2.2.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-artifact</artifactId>
+            <version>2.2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-model</artifactId>
+            <version>3.9.0</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.huolala.arch.hermes</groupId>
+            <artifactId>hermes-common</artifactId>
+            <version>2.0.5.RELEASE</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.9.11</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>5.2.5.RELEASE</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>2.0.1.Final</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>5.2.5.RELEASE</version>
+            <optional>true</optional>
+        </dependency>
+        <!--好像只能找到一级依赖，二级依赖找不到，所以这边定义-->
+        <dependency>
+            <groupId>cn.huolala.spidev</groupId>
+            <artifactId>spidev-common</artifactId>
+            <version>1.0.7.post2-RELEASE</version>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
 
     <build>
@@ -51,6 +104,26 @@
                 <configuration>
                     <goalPrefix>linter</goalPrefix>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.coveo</groupId>
+                <artifactId>fmt-maven-plugin</artifactId>
+                <version>2.9</version>
+                <configuration>
+                    <style>google</style>
+                    <verbose>true</verbose>
+                    <skip>false</skip>
+                    <skipSortingImports>true</skipSortingImports>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>google-style-check</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
