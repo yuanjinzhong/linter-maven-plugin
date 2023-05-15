@@ -51,7 +51,7 @@
     </executions>
 ```
 ## 关于run time
-目前三个linter策略，看注释可知含义
+目前三个linter策略(随着时间增加或者减少)，看注释可知含义
 
 ![img.png](images/img.png)
 
