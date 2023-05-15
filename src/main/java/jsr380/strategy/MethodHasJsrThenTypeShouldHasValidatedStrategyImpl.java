@@ -1,6 +1,5 @@
 package jsr380.strategy;
 
-import cn.huolala.arch.hermes.common.util.ArrayUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.springframework.validation.annotation.Validated;
@@ -30,24 +29,20 @@ public class MethodHasJsrThenTypeShouldHasValidatedStrategyImpl extends Jsr380Li
         // 参数上的注解列表
         Annotation[][] parameterAnnotations = method.getParameterAnnotations();
 
-        // 方法有范型参数列表
-        if (ArrayUtils.isNotEmpty(genericParameterTypes)) {
-          // 遍历参数
-          for (int i = 0; i < genericParameterTypes.length; i++) {
-            for (Annotation annotation : parameterAnnotations[i]) {
+        // 遍历参数
+        for (int i = 0; i < genericParameterTypes.length; i++) {
+          for (Annotation annotation : parameterAnnotations[i]) {
 
-              if (annotation instanceof Valid || isJsr380Annotation(annotation)) {
-                if (Objects.isNull(facadeClass.getAnnotation(Validated.class))
-                    || Objects.nonNull(
-                        facadeImps.get(facadeClass).getAnnotation(Validated.class))) {
+            if (annotation instanceof Valid || isJsr380Annotation(annotation)) {
+              if (Objects.isNull(facadeClass.getAnnotation(Validated.class))
+                  || Objects.nonNull(facadeImps.get(facadeClass).getAnnotation(Validated.class))) {
 
-                  linterErrorMsgs.add(
-                      String.format(
-                          "方法【%s】上含有jsr约束注解，则%s需要添加【Validated.class】注解或者%s不应该加【Validated.class】",
-                          method.getName(),
-                          facadeClass.getSimpleName(),
-                          facadeImps.get(facadeClass).getSimpleName()));
-                }
+                linterErrorMsgs.add(
+                    String.format(
+                        "方法【%s】上含有jsr约束注解，则%s需要添加【Validated.class】注解或者%s不应该加【Validated.class】",
+                        method.getName(),
+                        facadeClass.getSimpleName(),
+                        facadeImps.get(facadeClass).getSimpleName()));
               }
             }
           }

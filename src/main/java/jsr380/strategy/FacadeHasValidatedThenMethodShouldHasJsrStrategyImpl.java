@@ -1,6 +1,5 @@
 package jsr380.strategy;
 
-import cn.huolala.arch.hermes.common.util.ArrayUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.springframework.validation.annotation.Validated;
@@ -33,15 +32,13 @@ public class FacadeHasValidatedThenMethodShouldHasJsrStrategyImpl extends Jsr380
 
           // 参数上的注解列表
           Annotation[][] parameterAnnotations = method.getParameterAnnotations();
-          // 方法有范型参数列表
-          if (ArrayUtils.isNotEmpty(genericParameterTypes)) {
-            // 遍历参数
-            for (int i = 0; i < genericParameterTypes.length; i++) {
-              for (Annotation annotation : parameterAnnotations[i]) {
-                if (annotation instanceof Valid || isJsr380Annotation(annotation)) {
-                  // 至少一个方法
-                  PASS_THE_VERIFICATION = true;
-                }
+
+          // 遍历参数
+          for (int i = 0; i < genericParameterTypes.length; i++) {
+            for (Annotation annotation : parameterAnnotations[i]) {
+              if (annotation instanceof Valid || isJsr380Annotation(annotation)) {
+                // 至少一个方法
+                PASS_THE_VERIFICATION = true;
               }
             }
           }

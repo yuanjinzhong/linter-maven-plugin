@@ -1,6 +1,5 @@
 package jsr380.strategy;
 
-import cn.huolala.arch.hermes.common.util.ArrayUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.springframework.validation.annotation.Validated;
@@ -40,39 +39,35 @@ public class OverrideMethodMustNotAlterParameterConstraintsStrategyImpl
 
           // 只要方法上有约束注解，则校验实现类不方法不能该表约束注解
           if (hasJsr380Annotation(parameterAnnotations)) {
-            // 方法有范型参数列表
-            if (ArrayUtils.isNotEmpty(genericParameterTypes)) {
-              // 遍历参数
-              for (int i = 0; i < genericParameterTypes.length; i++) {
-                // 父方法第i个参数的注解
-                Annotation[] parameterAnnotation = parameterAnnotations[i];
+            // 遍历参数
+            for (int i = 0; i < genericParameterTypes.length; i++) {
+              // 父方法第i个参数的注解
+              Annotation[] parameterAnnotation = parameterAnnotations[i];
 
-                // 获取实现类对应的方法
-                Method subTypeMethod = null;
-                try {
-                  subTypeMethod =
-                      entry
-                          .getValue()
-                          .getDeclaredMethod(method.getName(), method.getParameterTypes());
-                } catch (NoSuchMethodException e) {
-                  // nothing
-                }
-                if (subTypeMethod != null) {
-                  Annotation[][] subtypeParameterAnnotations =
-                      subTypeMethod.getParameterAnnotations();
-                  // 实现类方法上第i个参数的注解
-                  Annotation[] subtypeParameterAnnotation = subtypeParameterAnnotations[i];
+              // 获取实现类对应的方法
+              Method subTypeMethod = null;
+              try {
+                subTypeMethod =
+                    entry
+                        .getValue()
+                        .getDeclaredMethod(method.getName(), method.getParameterTypes());
+              } catch (NoSuchMethodException e) {
+                // nothing
+              }
+              if (subTypeMethod != null) {
+                Annotation[][] subtypeParameterAnnotations =
+                    subTypeMethod.getParameterAnnotations();
+                // 实现类方法上第i个参数的注解
+                Annotation[] subtypeParameterAnnotation = subtypeParameterAnnotations[i];
 
-                  boolean sameConstrained =
-                      isEquallyParameterConstrained(
-                          parameterAnnotation, subtypeParameterAnnotation);
+                boolean sameConstrained =
+                    isEquallyParameterConstrained(parameterAnnotation, subtypeParameterAnnotation);
 
-                  if (!sameConstrained) {
-                    linterErrorMsgs.add(
-                        String.format(
-                            "实现类重写方法时，不可以改变约束注解===》【%s】",
-                            entry.getValue().getSimpleName() + "#" + method.getName()));
-                  }
+                if (!sameConstrained) {
+                  linterErrorMsgs.add(
+                      String.format(
+                          "实现类重写方法时，不可以改变约束注解===》【%s】",
+                          entry.getValue().getSimpleName() + "#" + method.getName()));
                 }
               }
             }
@@ -105,12 +100,10 @@ public class OverrideMethodMustNotAlterParameterConstraintsStrategyImpl
     }
 
     // 长度一致了
-    if (subtypeParameterAnnotation.length == parameterAnnotation.length) {
-      int length = subtypeParameterAnnotation.length;
-      for (int i = 0; i < length; i++) {
-        if (!subtypeParameterAnnotation[i].toString().equals(parameterAnnotation[i].toString())) {
-          sameConstrained = false;
-        }
+    int length = subtypeParameterAnnotation.length;
+    for (int i = 0; i < length; i++) {
+      if (!subtypeParameterAnnotation[i].toString().equals(parameterAnnotation[i].toString())) {
+        sameConstrained = false;
       }
     }
 

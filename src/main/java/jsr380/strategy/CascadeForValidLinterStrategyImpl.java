@@ -1,7 +1,5 @@
 package jsr380.strategy;
 
-import cn.huolala.arch.hermes.common.util.ArrayUtils;
-
 import javax.validation.Valid;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -29,14 +27,11 @@ public class CascadeForValidLinterStrategyImpl extends Jsr380LinterStrategy {
         // 参数上的注解列表
         Annotation[][] parameterAnnotations = method.getParameterAnnotations();
 
-        // 方法有范型参数列表
-        if (ArrayUtils.isNotEmpty(genericParameterTypes)) {
-          // 遍历参数
-          for (int i = 0; i < genericParameterTypes.length; i++) {
-            for (Annotation annotation : parameterAnnotations[i]) {
-              // 校验不通过则将错误信息放到集合里面
-              findJsrAnnotation(method, annotation, genericParameterTypes[i]);
-            }
+        // 遍历参数
+        for (int i = 0; i < genericParameterTypes.length; i++) {
+          for (Annotation annotation : parameterAnnotations[i]) {
+            // 校验不通过则将错误信息放到集合里面
+            findJsrAnnotation(method, annotation, genericParameterTypes[i]);
           }
         }
       }
@@ -61,19 +56,7 @@ public class CascadeForValidLinterStrategyImpl extends Jsr380LinterStrategy {
         for (Type actualTypeArgument : actualTypeArguments) {
 
           // 获取实际类型的参数,遍历看是否有jsr380注解
-          Field[] actualArgumentFields = ((Class) actualTypeArgument).getDeclaredFields();
-
-          for (Field actualArgumentField : actualArgumentFields) {
-            Annotation[] declaredAnnotations = actualArgumentField.getDeclaredAnnotations();
-            for (Annotation declaredAnnotation : declaredAnnotations) {
-
-              findJsrAnnotation(method, declaredAnnotation, actualArgumentField.getGenericType());
-
-              if (isJsr380Annotation(declaredAnnotation)) {
-                hasJsr380 = true;
-              }
-            }
-          }
+          hasJsr380 = isJsr380Exist(method, hasJsr380, (Class<?>) actualTypeArgument);
           // 范型参数错误信息记录
           if (!hasJsr380) {
             linterErrorMsgs.add(
@@ -86,18 +69,7 @@ public class CascadeForValidLinterStrategyImpl extends Jsr380LinterStrategy {
       } else {
 
         // 普通参数
-        Field[] declaredFields = ((Class) genericParameterType).getDeclaredFields();
-        for (Field declaredField : declaredFields) {
-          Annotation[] declaredAnnotations = declaredField.getDeclaredAnnotations();
-          for (Annotation declaredAnnotation : declaredAnnotations) {
-
-            findJsrAnnotation(method, declaredAnnotation, declaredField.getGenericType());
-
-            if (isJsr380Annotation(declaredAnnotation)) {
-              hasJsr380 = true;
-            }
-          }
-        }
+        hasJsr380 = isJsr380Exist(method, hasJsr380, (Class<?>) genericParameterType);
 
         if (!hasJsr380) {
           linterErrorMsgs.add(
@@ -108,5 +80,22 @@ public class CascadeForValidLinterStrategyImpl extends Jsr380LinterStrategy {
         }
       }
     }
+  }
+
+  private Boolean isJsr380Exist(Method method, Boolean hasJsr380, Class<?> actualTypeArgument) {
+    Field[] actualArgumentFields = actualTypeArgument.getDeclaredFields();
+
+    for (Field actualArgumentField : actualArgumentFields) {
+      Annotation[] declaredAnnotations = actualArgumentField.getDeclaredAnnotations();
+      for (Annotation declaredAnnotation : declaredAnnotations) {
+
+        findJsrAnnotation(method, declaredAnnotation, actualArgumentField.getGenericType());
+
+        if (isJsr380Annotation(declaredAnnotation)) {
+          hasJsr380 = true;
+        }
+      }
+    }
+    return hasJsr380;
   }
 }
