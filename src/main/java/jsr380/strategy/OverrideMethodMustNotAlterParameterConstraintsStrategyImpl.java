@@ -70,7 +70,7 @@ public class OverrideMethodMustNotAlterParameterConstraintsStrategyImpl
                   if (!sameConstrained) {
                     linterErrorMsgs.add(
                         String.format(
-                            "重写方法必须不涉及参数约束:实现类中的方法【%s】",
+                            "重写方法必须不涉及参数约束的变更:实现类中的方法【%s】",
                             entry.getValue().getSimpleName() + "#" + method.getName()));
                   }
                 }
