@@ -70,7 +70,7 @@ public class OverrideMethodMustNotAlterParameterConstraintsStrategyImpl
                   if (!sameConstrained) {
                     linterErrorMsgs.add(
                         String.format(
-                            "重写方法必须不涉及参数约束的变更:实现类中的方法【%s】",
+                            "实现类重写方法时，不可以改变约束注解===》【%s】",
                             entry.getValue().getSimpleName() + "#" + method.getName()));
                   }
                 }
@@ -92,14 +92,15 @@ public class OverrideMethodMustNotAlterParameterConstraintsStrategyImpl
   private boolean isEquallyParameterConstrained(
       Annotation[] parameterAnnotation, Annotation[] subtypeParameterAnnotation) {
 
+    boolean sameConstrained = true;
+
     // 只要子接口没有注解，则无脑通过
     if (subtypeParameterAnnotation.length == 0) {
       return true;
     }
 
     // 注解长度不一致
-    if (subtypeParameterAnnotation.length > 0
-        && subtypeParameterAnnotation.length != parameterAnnotation.length) {
+    if (subtypeParameterAnnotation.length != parameterAnnotation.length) {
       return false;
     }
 
@@ -107,13 +108,13 @@ public class OverrideMethodMustNotAlterParameterConstraintsStrategyImpl
     if (subtypeParameterAnnotation.length == parameterAnnotation.length) {
       int length = subtypeParameterAnnotation.length;
       for (int i = 0; i < length; i++) {
-        if (subtypeParameterAnnotation[i] != parameterAnnotation[i]) {
-          return false;
+        if (!subtypeParameterAnnotation[i].toString().equals(parameterAnnotation[i].toString())) {
+          sameConstrained = false;
         }
       }
     }
 
-    return false;
+    return sameConstrained;
   }
 
   /**
