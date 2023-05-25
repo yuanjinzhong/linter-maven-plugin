@@ -11,6 +11,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.type.classreading.SimpleMetadataReaderFactory;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
+import org.springframework.validation.annotation.Validated;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
@@ -34,7 +35,13 @@ public abstract class Jsr380LinterStrategy {
   /** 实现为key,接口为value */
   protected static Map<Class, Class> impFacades = new ConcurrentHashMap<>(256);
 
+  protected static Set<Class<?>> classWithValidated;
+
+  protected static Reflections reflections;
+
   private static Class<? extends Annotation> rpcAnnotationType = HermesService.class;
+
+  private static Class<? extends Annotation> validAnnotationType = Validated.class;
 
   private static final List<Class> jsrClassList = new ArrayList();
 
@@ -42,8 +49,9 @@ public abstract class Jsr380LinterStrategy {
   protected static final List<String> linterErrorMsgs = new ArrayList();
 
   static {
-    Reflections reflections = new Reflections(LinterResourceManager.getPath());
+    reflections = new Reflections(LinterResourceManager.getPath());
     Set<Class<?>> hermesImpls = reflections.getTypesAnnotatedWith(rpcAnnotationType);
+    classWithValidated = reflections.getTypesAnnotatedWith(validAnnotationType);
     // 维护hermes实现类和接口的关系
     for (Class<?> hermesImpl : hermesImpls) {
       Assert.isTrue(!hermesImpl.isInterface(), "HermesService.class注解只能添加到类上面:" + hermesImpl);
