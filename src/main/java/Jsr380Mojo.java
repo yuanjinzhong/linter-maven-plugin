@@ -40,7 +40,8 @@ public class Jsr380Mojo extends AbstractMojo {
   /** 配置校验策略：可用值见：StrategyEnum */
   @Parameter(
       property = "strategyCodes",
-      defaultValue = "PREVENT_MISS_USE,VALIDATE_EXiSIT,CASCADE_FOR_VALID")
+      defaultValue =
+          "PREVENT_MISS_USE,CLASS_HAS_VALIDATED,CASCADE_FOR_VALID,METHOD_HAS_JSR,OVERRIDE_METHOD_NOT_ALTER_CONSTRAINTS")
   private List<String> strategyCodes;
 
   @Override
