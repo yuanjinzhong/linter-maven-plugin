@@ -51,7 +51,7 @@ public abstract class Jsr380LinterStrategy {
   static {
     reflections = new Reflections(LinterResourceManager.getPath());
     Set<Class<?>> hermesImpls = reflections.getTypesAnnotatedWith(rpcAnnotationType);
-    classWithValidated = reflections.getTypesAnnotatedWith(validAnnotationType);
+    classWithValidated = reflections.getTypesAnnotatedWith(validAnnotationType, true);
     // 维护hermes实现类和接口的关系
     for (Class<?> hermesImpl : hermesImpls) {
       Assert.isTrue(!hermesImpl.isInterface(), "HermesService.class注解只能添加到类上面:" + hermesImpl);

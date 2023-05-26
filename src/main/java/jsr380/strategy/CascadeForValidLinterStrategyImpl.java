@@ -99,7 +99,7 @@ public class CascadeForValidLinterStrategyImpl extends Jsr380LinterStrategy {
               String.format(
                   "Rpc接口:【%s】的参数:【%s】由【@Valid】修饰，则内部字段需要添加相关约束注解",
                   method.getDeclaringClass().getSimpleName() + "#" + method.getName(),
-                  genericParameterType.getTypeName()));
+                  ((Class<?>) genericParameterType).getSimpleName()));
         }
       }
     }
