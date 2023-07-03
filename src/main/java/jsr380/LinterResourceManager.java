@@ -8,6 +8,8 @@ package jsr380;
 public abstract class LinterResourceManager {
   private static final ThreadLocal<String> packageToScan = new ThreadLocal<>();
 
+  private static final ThreadLocal<Boolean> isStrictMode = new ThreadLocal<>();
+
   public static final void setPath(String path) {
     packageToScan.set(path);
   }
@@ -16,5 +18,15 @@ public abstract class LinterResourceManager {
     String path = packageToScan.get();
     packageToScan.remove();
     return path;
+  }
+
+  public static final void setMode(Boolean Mode) {
+    isStrictMode.set(Mode);
+  }
+
+  public static final Boolean getMode() {
+    Boolean mode = isStrictMode.get();
+    isStrictMode.remove();
+    return mode;
   }
 }

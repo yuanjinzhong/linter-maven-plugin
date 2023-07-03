@@ -33,6 +33,10 @@ public class Jsr380Mojo extends AbstractMojo {
   @Parameter(property = "packageToScan", defaultValue = "cn.huolala.customer.application.command")
   private String packageToScan;
 
+  /** 默认严格模式，严格模式:相关规范只能在facade接口层使用，非严格模式：可以在@Service层使用 */
+  @Parameter(property = "isStrictMode", defaultValue = "true")
+  private boolean isStrictMode;
+
   /** 当前classpath下一级元素（依赖） */
   @Parameter(defaultValue = "${project.compileClasspathElements}", readonly = true, required = true)
   private List<String> compilePath;
@@ -54,6 +58,8 @@ public class Jsr380Mojo extends AbstractMojo {
     redefineWorkClassLoader();
 
     LinterResourceManager.setPath(packageToScan);
+
+    LinterResourceManager.setMode(isStrictMode);
 
     Jsr380LinterExecutor.doLinter(strategyCodes);
 

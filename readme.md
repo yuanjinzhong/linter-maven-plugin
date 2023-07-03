@@ -82,3 +82,10 @@
 ![img_4.png](images/img_4.png)
 
 
+## 更新
+### 新增严格模式控制
+```java
+  /** 默认严格模式，严格模式:相关规范只能在facade接口层使用，非严格模式：可以在@Service层使用 */
+  @Parameter(property = "isStrictMode", defaultValue = "true")
+  private boolean isStrictMode;
+```
