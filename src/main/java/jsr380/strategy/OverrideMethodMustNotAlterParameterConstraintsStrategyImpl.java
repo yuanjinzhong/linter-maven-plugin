@@ -37,6 +37,25 @@ public class OverrideMethodMustNotAlterParameterConstraintsStrategyImpl
           // 参数上的注解列表
           Annotation[][] parameterAnnotations = method.getParameterAnnotations();
 
+          /** 有种情况： 接口方法上没加jsr380注解，但是实现类方法上加了；这种情况也是不允许的 */
+          try {
+            Annotation[][] childParameterAnnotations =
+                entry
+                    .getValue()
+                    .getDeclaredMethod(method.getName(), method.getParameterTypes())
+                    .getParameterAnnotations();
+
+            if (!hasJsr380Annotation(parameterAnnotations) // 父方法无jsr注解
+                && hasJsr380Annotation(childParameterAnnotations)) { // 子方法有jsr注解
+              linterErrorMsgs.add(
+                  String.format(
+                      "实现类重写方法时，不可以改变约束注解===》【%s】",
+                      entry.getValue().getSimpleName() + "#" + method.getName()));
+            }
+          } catch (NoSuchMethodException e) {
+            // do nothing
+          }
+
           // 只要方法上有约束注解，则校验实现类不方法不能该表约束注解
           if (hasJsr380Annotation(parameterAnnotations)) {
             // 遍历参数
