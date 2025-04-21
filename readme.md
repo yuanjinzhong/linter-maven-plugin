@@ -89,3 +89,38 @@
   @Parameter(property = "isStrictMode", defaultValue = "true")
   private boolean isStrictMode;
 ```
+# 关于插件的说明
+```java
+@Mojo(
+    name = "check",
+    defaultPhase = LifecyclePhase.COMPILE,
+    threadSafe = true,
+    requiresDependencyResolution = ResolutionScope.COMPILE)
+public class Jsr380Mojo extends AbstractMojo {
+```
+以上为linter插件定义了一个能力，能力的名字叫做：check，在插件项目中，可以定义很多能力（Mojo类），需要定义不同的名字
+```xml
+<plugin>
+    <groupId>cn.huolala.legao</groupId>
+    <artifactId>linter-maven-plugin</artifactId>
+    <version>1.0.1-SNAPSHOT</version>
+    <configuration>
+        <packageToScan>cn.huolala.customer.application.command</packageToScan>
+        <strategyCodes>
+            <strategyCode>PREVENT_MISS_USE</strategyCode>
+            <strategyCode>VALIDATE_EXiSIT</strategyCode>
+            <strategyCode>CASCADE_FOR_VALID</strategyCode>
+        </strategyCodes>
+    </configuration>
+    <executions>
+        <execution>
+            <id>linter-check</id>
+            <phase>compile</phase>
+            <goals>
+                <goal>check</goal>
+            </goals>
+        </execution>
+    </executions>
+ </plugin>
+```
+linter-maven-plugin 有很多能力，但是此时此刻，我想使用 check能力，并且绑定在compile阶段
